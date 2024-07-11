@@ -19,7 +19,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
 const JobForm = ({orgId, jobDoc}) => {
-    console.log(jobDoc)
+    // console.log(jobDoc)
     const [countryId, setCountryid] = useState(jobDoc?.countryId || 0);
     const [stateId, setstateid] = useState(jobDoc?.stateId || 0);
     const [cityId, setCityId] = useState(jobDoc?.cityId || 0)

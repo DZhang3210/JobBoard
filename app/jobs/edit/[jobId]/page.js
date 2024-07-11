@@ -13,7 +13,7 @@ const EditJobPage = async (props) => {
     return 'Not found';
   }
   const {user} = await getUser()
-  console.log(user)
+  // console.log(user)
   if(!user){
     return 'You need to sign in'
   }

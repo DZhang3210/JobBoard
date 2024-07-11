@@ -1,7 +1,7 @@
 import { WorkOS } from '@workos-inc/node'
 import Jobs from '../../../components/Jobs'
 import React from 'react'
-import { JobModel } from '../../../models/Job'
+import { addOrgAndUserData, JobModel } from '../../../models/Job'
 import mongoose from 'mongoose'
 import { getUser } from '@workos-inc/authkit-nextjs'
 
@@ -10,20 +10,8 @@ const page = async (props) => {
   const org = await workos.organizations.getOrganization(props.params.orgId)
   const {user} = await getUser()
   await mongoose.connect(process.env.MONGO_URI)
-  const jobDocs = JSON.parse(JSON.stringify(await JobModel.find({orgId: org.id})))
-  let oms = null
-  if(user) {
-    oms = await workos.userManagement.listOrganizationMemberships({
-      userId: user.id
-    })   
-  }
-  for(const job of jobDocs){
-    const org = await workos.organizations.getOrganization(job.orgId)
-    job.orgName = org.name
-    if (oms && oms.data.length > 0) {
-      job.isAdmin = oms.data.find(om => om.organizationId === job.orgId)
-    }
-  }
+  let jobDocs = JSON.parse(JSON.stringify(await JobModel.find({orgId: org.id})))
+  jobDocs = await addOrgAndUserData(jobDocs, user)
   return (
     <section>
       <div className='container'>

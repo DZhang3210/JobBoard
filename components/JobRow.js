@@ -1,10 +1,15 @@
+'use client'
 import { Heart } from 'lucide-react'
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import TimeAgo from './TimeAgo'
 import Link from 'next/link'
-const JobRow = async ({jobInfo}) => {
+import mongoose from 'mongoose'
+import { JobModel } from '../models/Job'
+import { revalidatePath } from 'next/cache'
+import axios from 'axios'
+const JobRow = ({jobInfo}) => {
   return (
     <div className='bg-white p-4 rounded-lg shadow-sm md:flex relative'>
         <div className='absolute top-4 right-4 cursor-pointercc'>
@@ -22,8 +27,12 @@ const JobRow = async ({jobInfo}) => {
             </div>
             <div className='grow sm:flex'>
                 <div className='grow'>
-                    <div className='text-gray-500 text-sm'>{jobInfo.orgName}</div>
-                    <div className='font-bold text-lg mb-1'>{jobInfo.title}</div>
+                    <div>
+                        <Link href = {`/jobs/${jobInfo.orgId}`}className='text-gray-500 text-sm hover:underline'>{jobInfo.orgName}</Link>
+                    </div>
+                    <div>
+                        <Link href = {'/show/'+jobInfo._id} className='font-bold text-lg mb-1 hover:underline'>{jobInfo.title}</Link>
+                    </div>
                     <div className='text-gray-500 text-sm capitalize'>
                         {jobInfo.remote} &middot; {jobInfo.state}, {jobInfo.country} &middot; {jobInfo.type}-time{' '}
                         {jobInfo.isAdmin && (
@@ -33,9 +42,15 @@ const JobRow = async ({jobInfo}) => {
                                 Edit
                             </Link>
                             {' '}&middot;{' '}
-                            <Link href= {`/jobs/delete/${jobInfo._id}`}>
+                            <button 
+                                type = "button"
+                                onClick = {async () => {
+                                    await axios.delete('/api/jobs?id=' + jobInfo._id)
+                                    window.location.reload()
+                                }}
+                            >
                                 Delete
-                            </Link>
+                            </button>
                             </>
                         )}
                     </div>

@@ -1,3 +1,5 @@
+'use server'
+import { WorkOS } from "@workos-inc/node";
 import { model, models, Schema } from "mongoose";
 
 const jobSchema = new Schema({
@@ -19,5 +21,23 @@ const jobSchema = new Schema({
     contactEmail: {type:String, required: true},
     description: {type:String, required: true}
 }, {timestamps: true})
+
+export async function addOrgAndUserData(jobDocs, user){
+  let oms = null
+  const workos = new WorkOS(process.env.WORKOS_API_KEY);
+  if(user) {
+    oms = await workos.userManagement.listOrganizationMemberships({
+      userId: user?.id
+    })   
+  }
+  for(const job of jobDocs){
+    const org = await workos.organizations.getOrganization(job.orgId)
+    job.orgName = org.name
+    if (oms && oms.data.length > 0) {
+      job.isAdmin = oms.data.find(om => om.organizationId === job.orgId)
+    }
+  }
+  return jobDocs
+}
 
 export const JobModel = models?.Job || model('Job', jobSchema)

@@ -16,14 +16,14 @@ const ImageUpload = ({name,icon, defaultValue}) => {
     async function upload (ev) {
         const input = ev.target
         // console.log(input)
-        console.log(input.files)
+        // console.log(input.files)
         if(input.files.length > 0){
             setIsUploading(true)
             const file = input.files[0]
             const data = new FormData;
             data.set('file', file)
             const response = await axios.post('/api/upload', data)
-            console.log(response)
+            // console.log(response)
             if(response.data.url) {
                 setUrl(response.data.url)
                 setIsUploading(false)

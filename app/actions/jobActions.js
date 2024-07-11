@@ -14,7 +14,7 @@ export async function saveJobAction(data) {
     )
 
     if ('orgId' in jobData){
-        console.log("REVALIDATED")
+        // console.log("REVALIDATED")
         revalidatePath(`/jobs/${jobData?.orgId}`)
     }
     return JSON.parse(JSON.stringify(jobDoc))
