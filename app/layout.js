@@ -3,6 +3,13 @@ import "./globals.css";
 import Link from "next/link";
 import Header from "../components/Header";
 import { Theme } from "@radix-ui/themes";
+import TimeAgo from 'javascript-time-ago'
+
+import en from 'javascript-time-ago/locale/en'
+import ru from 'javascript-time-ago/locale/ru'
+
+TimeAgo.addDefaultLocale(en)
+TimeAgo.addLocale(ru)
 
 const inter = Inter({ subsets: ["latin"] });
 

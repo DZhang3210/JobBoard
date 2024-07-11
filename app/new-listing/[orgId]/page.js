@@ -13,7 +13,7 @@ const NewListingForOrgPage = async ({params}) => {
         return 'no access'
     }
   return (
-    <JobForm/>
+    <JobForm orgId={orgId}/>
   )
 }
 

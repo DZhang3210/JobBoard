@@ -21,7 +21,7 @@ export async function POST(req) {
     const buffer = Buffer.concat(chunks)
     const bucketName ='david-job-board'  
 
-    s3Client.send(new PutObjectCommand({
+    await s3Client.send(new PutObjectCommand({
         Bucket: bucketName,
         Key: newFilename,
         ACL: 'public-read',
